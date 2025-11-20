@@ -25,6 +25,15 @@ app.get('/api/flowers', (req, res) => {
   });
 });
 
+app.get('/api/categories', (req, res) => {
+  connection.query('SELECT * FROM kategoriak', (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Database query error' });
+    }
+    res.status(200).json(results);
+  });
+});
+
 app.get('/api/flowers/:id', (req, res) => {
   connection.query('SELECT * FROM aruk WHERE id = ?', [+req.params.id], (error, results) => {
     if (error) {
