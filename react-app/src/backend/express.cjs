@@ -49,9 +49,9 @@ app.get('/api/flowers/:id', (req, res) => {
 });
 
 app.post('/api/flowers', (req, res) => {
-  const { nev, leiras, keszlet, kepUrl } = req.body;
-  const ar = +req.body.ar;
-  const kategoriak_id = +req.body.kategoriak_id;
+  let { nev, leiras, keszlet, kepUrl } = req.body;
+  let ar = +req.body.ar;
+  let kategoriak_id = +req.body.kategoriak_id;
 
   if(!nev) {
     return res.status(400).json({ error: 'Hiányzó név' });
@@ -86,9 +86,9 @@ app.post('/api/flowers', (req, res) => {
 });
 
 app.put('/api/flowers/:id', (req, res) => {
-  const { nev, leiras, keszlet, kepUrl } = req.body;
-  const ar = +req.body.ar;
-  const kategoriak_id = +req.body.kategoriak_id;
+  let { nev, leiras, keszlet, kepUrl } = req.body;
+  let ar = +req.body.ar;
+  let kategoriak_id = +req.body.kategoriak_id;
 
   if(!nev) {
     return res.status(400).json({ error: 'Hiányzó név' });
