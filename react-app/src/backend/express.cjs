@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
 console.log("Connected to the database.");
 
 app.get('/api/flowers', (req, res) => {
-  connection.query('SELECT * FROM aruk', (error, results) => {
+  connection.query('SELECT aruk.id, aruk.nev, aruk.leiras, aruk.keszlet, aruk.ar, aruk.kepUrl, kategoriak.nev AS kategoria_nev FROM aruk INNER JOIN kategoriak ON aruk.kategoriaId = kategoriak.id', (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Database query error' });
     }
@@ -35,7 +35,7 @@ app.get('/api/categories', (req, res) => {
 });
 
 app.get('/api/flowers/:id', (req, res) => {
-  connection.query('SELECT * FROM aruk WHERE id = ?', [+req.params.id], (error, results) => {
+  connection.query('SELECT aruk.id, aruk.nev, aruk.leiras, aruk.keszlet, aruk.ar, aruk.kepUrl, kategoriak.nev AS kategoria_nev FROM aruk INNER JOIN kategoriak ON aruk.kategoriaId = kategoriak.id WHERE aruk.id = ?', [+req.params.id], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Query error' });
     }
@@ -51,7 +51,7 @@ app.get('/api/flowers/:id', (req, res) => {
 app.post('/api/flowers', (req, res) => {
   let { nev, leiras, keszlet, kepUrl } = req.body;
   let ar = +req.body.ar;
-  let kategoriak_id = +req.body.kategoriak_id;
+  let kategoriaId = +req.body.kategoriaId;
 
   if(!nev) {
     return res.status(400).json({ error: 'Hiányzó név' });
@@ -69,20 +69,13 @@ app.post('/api/flowers', (req, res) => {
   if(!kepUrl) {
     kepUrl = null;
   }
-  if(isNaN(kategoriak_id)) {
-    kategoriak_id = null;
+  if(isNaN(kategoriaId)) {
+    kategoriaId = null;
   }
-
-  console.log("nev:", nev);
-  console.log("leiras:", leiras);
-  console.log("ar:", ar);
-  console.log("keszlet:", keszlet);
-  console.log("kepUrl:", kepUrl);
-  console.log("kategoriak_id:", kategoriak_id);
 
   connection.query(
     'INSERT INTO aruk (nev, leiras, ar, keszlet, kepUrl, kategoriaId) VALUES (?, ?, ?, ?, ?, ?)',
-    [nev, leiras, ar, keszlet, kepUrl, kategoriak_id],
+    [nev, leiras, ar, keszlet, kepUrl, kategoriaId],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -96,7 +89,7 @@ app.post('/api/flowers', (req, res) => {
 app.put('/api/flowers/:id', (req, res) => {
   let { nev, leiras, keszlet, kepUrl } = req.body;
   let ar = +req.body.ar;
-  let kategoriak_id = +req.body.kategoriak_id;
+  let kategoriaId = +req.body.kategoriaId;
 
   if(!nev) {
     return res.status(400).json({ error: 'Hiányzó név' });
@@ -114,13 +107,13 @@ app.put('/api/flowers/:id', (req, res) => {
   if(!kepUrl) {
     kepUrl = null;
   }
-  if(isNaN(kategoriak_id)) {
-    kategoriak_id = null;
+  if(isNaN(kategoriaId)) {
+    kategoriaId = null;
   }
 
   connection.query(
     'UPDATE aruk SET nev = ?, leiras = ?, ar = ?, keszlet = ?, kepUrl = ?, kategoriaId = ? WHERE id = ?',
-    [nev, leiras, ar, keszlet, kepUrl, kategoriak_id, +req.params.id],
+    [nev, leiras, ar, keszlet, kepUrl, kategoriaId, +req.params.id],
     (error, results) => {
       if (error) {
         return res.status(500).json({ error: 'Update error' });
