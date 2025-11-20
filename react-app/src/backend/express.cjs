@@ -73,11 +73,19 @@ app.post('/api/flowers', (req, res) => {
     kategoriak_id = null;
   }
 
+  console.log("nev:", nev);
+  console.log("leiras:", leiras);
+  console.log("ar:", ar);
+  console.log("keszlet:", keszlet);
+  console.log("kepUrl:", kepUrl);
+  console.log("kategoriak_id:", kategoriak_id);
+
   connection.query(
-    'INSERT INTO aruk (nev, leiras, ar, keszlet, kepUrl, kategoriak_id) VALUES (?, ?, ?, ?, ?, ?)',
+    'INSERT INTO aruk (nev, leiras, ar, keszlet, kepUrl, kategoriaId) VALUES (?, ?, ?, ?, ?, ?)',
     [nev, leiras, ar, keszlet, kepUrl, kategoriak_id],
     (error, results) => {
       if (error) {
+        console.log(error);
         return res.status(500).json({ error: 'Insert error' });
       }
       res.status(201).json({ msg: 'Sikeres hozzáadás!'});
@@ -111,7 +119,7 @@ app.put('/api/flowers/:id', (req, res) => {
   }
 
   connection.query(
-    'UPDATE aruk SET nev = ?, leiras = ?, ar = ?, keszlet = ?, kepUrl = ?, kategoriak_id = ? WHERE id = ?',
+    'UPDATE aruk SET nev = ?, leiras = ?, ar = ?, keszlet = ?, kepUrl = ?, kategoriaId = ? WHERE id = ?',
     [nev, leiras, ar, keszlet, kepUrl, kategoriak_id, +req.params.id],
     (error, results) => {
       if (error) {
