@@ -53,6 +53,26 @@ app.post('/api/flowers', (req, res) => {
   const ar = +req.body.ar;
   const kategoriak_id = +req.body.kategoriak_id;
 
+  if(!nev) {
+    return res.status(400).json({ error: 'Hiányzó név' });
+  }
+
+  if(leiras === undefined) {
+    leiras = null;
+  }
+  if(isNaN(ar)) {
+    ar = null;
+  }
+  if(isNaN(keszlet)) {
+    keszlet = null;
+  }
+  if(!kepUrl) {
+    kepUrl = null;
+  }
+  if(isNaN(kategoriak_id)) {
+    kategoriak_id = null;
+  }
+
   connection.query(
     'INSERT INTO aruk (nev, leiras, ar, keszlet, kepUrl, kategoriak_id) VALUES (?, ?, ?, ?, ?, ?)',
     [nev, leiras, ar, keszlet, kepUrl, kategoriak_id],
@@ -69,6 +89,26 @@ app.put('/api/flowers/:id', (req, res) => {
   const { nev, leiras, keszlet, kepUrl } = req.body;
   const ar = +req.body.ar;
   const kategoriak_id = +req.body.kategoriak_id;
+
+  if(!nev) {
+    return res.status(400).json({ error: 'Hiányzó név' });
+  }
+
+  if(leiras === undefined) {
+    leiras = null;
+  }
+  if(isNaN(ar)) {
+    ar = null;
+  }
+  if(isNaN(keszlet)) {
+    keszlet = null;
+  }
+  if(!kepUrl) {
+    kepUrl = null;
+  }
+  if(isNaN(kategoriak_id)) {
+    kategoriak_id = null;
+  }
 
   connection.query(
     'UPDATE aruk SET nev = ?, leiras = ?, ar = ?, keszlet = ?, kepUrl = ?, kategoriak_id = ? WHERE id = ?',
@@ -103,5 +143,5 @@ app.delete('/api/flowers/:id', (req, res) => {
 const port = 3333;
 
 app.listen(port, () => {
-    console.log("Cigány megy a házhoz!")
+    console.log("Fut")
 })
